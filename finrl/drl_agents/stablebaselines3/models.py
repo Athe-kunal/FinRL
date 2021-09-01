@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import time
 import gym
+import os
 
 from finrl.apps import config
 from finrl.neo_finrl.preprocessor.preprocessors import FeatureEngineer, data_split
@@ -114,6 +115,11 @@ class DRLAgent:
             policy_kwargs=policy_kwargs,
             **model_kwargs,
         )
+        tmp_path = os.getcwd() + "\tmp\{}_log".format(
+            model_name)
+        
+        logger = configure(tmp_path, ["csv","tensorboard"])
+        model.set_logger(logger)
         return model
 
     def train_model(self, model, tb_log_name, total_timesteps=5000):
